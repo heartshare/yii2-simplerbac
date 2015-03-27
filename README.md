@@ -32,7 +32,7 @@ in module section
 'simplerbac'=>[
               'class'=>'\insolita\simplerbac\RbacModule',
               'userClass '=>'app\models\User',
-              'userPk=>'id',
+              'userPk'=>'id',
               'usernameAttribute'=>'username'
           ],
           ```
