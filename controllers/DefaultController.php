@@ -26,7 +26,7 @@ class DefaultController extends Controller
         return [
             [
                 'class' => 'yii\filters\ContentNegotiator',
-                'except' => ['index'],
+                'except' => ['index','convert','assign','users'],
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ],
