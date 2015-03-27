@@ -47,7 +47,6 @@ class RbacModule extends \yii\base\Module {
     public function init()
     {
         parent::init();
-        \Yii::setAlias('@redisrbac', __DIR__);
         $this->registerTranslations();
 
     }
