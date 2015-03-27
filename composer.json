@@ -1,0 +1,23 @@
+{
+    "name": "insolita/yii2-simplerbac",
+    "description": "Simple rbac-manager module for small data",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","rbac"],
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "insolita",
+            "email": "nomail@mail.ru"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-bootstrap":"*"
+
+    },
+    "autoload": {
+        "psr-4": {
+            "insolita\\simplerbac\\": ""
+        }
+    }
+}
