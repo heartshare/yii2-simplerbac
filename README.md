@@ -1,7 +1,6 @@
-Redised PhpManager and simple rbac manager
+Simple rbac manager
 ===================
-Store PhpManager data in redis,
-full-feature RedisManager in the development
+for small data. Allow manage roles and operations, and assign to user
 
 Installation
 ------------
