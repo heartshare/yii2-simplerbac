@@ -14,6 +14,7 @@ use yii\base\Event;
 use yii\base\Model;
 use Yii;
 use yii\base\ModelEvent;
+use yii\data\ActiveDataProvider;
 
 class RbacModel extends Model{
     const TYPE_ROLE = 1;
