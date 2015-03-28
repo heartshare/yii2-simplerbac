@@ -39,7 +39,7 @@ jQuery(function(){
 var elems=$elems;
     $('#cy').cytoscape({
       layout: {
-          name: 'cose',
+          name: 'breadthfirst',
          directed: true,
         padding: 15
       },
