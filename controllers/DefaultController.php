@@ -233,6 +233,7 @@ class DefaultController extends Controller
 
     public function actionAssign($userid)
     {
+        \Yii::$app->response->format = 'json';
         $model = new RbacModel();
         $user = $this->findUser($userid);
         $model->scenario = 'userassign';
@@ -240,7 +241,7 @@ class DefaultController extends Controller
             if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
                 $assig = $model->userAssign($userid);
                 if (!$assig) {
-                    $result = ['state' => 'novalid', 'error' => $assig];
+                    $result = ['state' => 'false', 'error' => $assig];
                     \Yii::$app->response->format = 'json';
                     return $result;
                 } else {
@@ -249,12 +250,12 @@ class DefaultController extends Controller
                     return $result;
                 }
             } else {
-                $result = ['state' => 'novalid', 'error' => Html::errorSummary($model)];
+                $result = ['state' => 'false', 'error' => Html::errorSummary($model)];
                 \Yii::$app->response->format = 'json';
                 return $result;
             }
         }
-        return $this->renderAjax('_assign', ['model' => $model, 'user' => $user]);
+        return ['state' => 'success', 'result'=>$this->renderAjax('_assign', ['model' => $model, 'user' => $user])];
     }
 
     public function actionConvert()

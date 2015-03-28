@@ -10,7 +10,6 @@
 			if (loader_id) {
 				$(loader_id).show();
 			}
-			console.log('run send for '+$(this).attr('id') +'/'+ $(this).attr('class'));
 
 			var ok_target = $(this).data('oktarget');
 			var err_target = $(this).data('errtarget');
@@ -21,7 +20,6 @@
 					$(err_target).hide();
 					(ok_target && response.result) ? $(ok_target).html(response.result) : '';
 					if (trigger) {
-						console.log('fire trigger '+trigger);
 						$(document).trigger(trigger);
 					}
 					if (scroll && ok_target) {
@@ -37,9 +35,6 @@
 
 			}).error(function (response) {
 				if(typeof(response) == 'object' && response.responseJSON){
-					console.log(response.responseJSON.name);
-					console.log(response.responseJSON.code);
-					console.log(response.responseJSON.message);
 					err='Server Error '+response.responseJSON.code+ response.responseJSON.message;
 				}else{
 					err=response;
@@ -97,9 +92,6 @@
 				},
 				error: function (response) {
 					if(typeof(response) == 'object' && response.responseJSON){
-						console.log(response.responseJSON.name);
-						console.log(response.responseJSON.code);
-						console.log(response.responseJSON.message);
 						err='Server Error '+response.responseJSON.code+ response.responseJSON.message;
 					}else{
 						err=response;
@@ -111,7 +103,7 @@
 							actions.scroll(err_target);
 						}
 					} else {
-						alert(response);
+						alert(err);
 					}
 				},
 				complete: function () {
@@ -127,6 +119,9 @@
 		scroll: function (selector) {
 			var scrollTop = $(selector).offset().top;
 			$(document).scrollTop(scrollTop);
+		},
+		openmodal:function(){
+			// TODO
 		}
 
 	};

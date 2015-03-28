@@ -40,7 +40,7 @@ $js
     = <<<JS
 $(document).on("click","[data-remote]",function(e) {
 e.preventDefault();
-$.ajax({url: $(this).data('remote'), type: "GET",async:true,success: function(response){jQuery("div#Assigs .modal-body").html(response);} });
+$.ajax({url: $(this).data('remote'), type: "GET",async:true,success: function(response){if(response.result){jQuery("div#Assigs .modal-body").html(response.result);}}});
 });
 $('#Assigs').on('hidden.bs.modal', function (e) {
   $("div#Assigs .modal-body").html('');
@@ -65,16 +65,19 @@ $('[rel="popover"]').popover();
                           $("div#Assigs .modal-body").html('');
                           $("#Assigs").modal('hide');
                           $.pjax.reload({container:'#userpjax'});
-
                         }else{
                            $("div#ch-error").html(response.error);
                            $("div#ch-error").show();
                            $('#ldr').hide();
                         }
-
                     },
                     error: function(response) {
-                        console.log(response);
+                            if(typeof(response) == 'object' && response.responseJSON){
+                            err='Server Error '+response.responseJSON.code+ response.responseJSON.message;
+                        }else{
+                            err=response;
+                        }
+                        alert(err);
                     }
                 });
 
