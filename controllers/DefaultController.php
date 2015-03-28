@@ -260,9 +260,27 @@ class DefaultController extends Controller
     public function actionConvert(){
         \Yii::$app->authManager->removeAll();
         \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(\Yii::$app->authManager->itemFile),'items');
-        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(Yii::$app->authManager->ruleFile),'rules');
+        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(\Yii::$app->authManager->ruleFile),'rules');
         \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(\Yii::$app->authManager->assignmentFile),'assignments');
         return $this->redirect(['index']);
+    }
+
+    public function actionAllItems()
+    {
+        $roles = Yii::$app->authManager->getRoles();
+        $permissions = Yii::$app->authManager->getPermissions();
+        $items = ArrayHelper::merge($roles, $permissions);
+        $links = [];
+        $_keys = array_keys($items);
+        foreach ($items as $np=>$oP) {
+            foreach ($c = Yii::$app->authManager->getChildren($np) as $nC=>$oC) {
+                $links[] = [
+                    'source' => array_search($np, $_keys),
+                    'target' => array_search($nC, $_keys),
+                ];
+            }
+        }
+          return  ['nodes'=>array_values($items),'links'=>$links];
     }
 
     /**
