@@ -242,16 +242,13 @@ class DefaultController extends Controller
                 $assig = $model->userAssign($userid);
                 if (!$assig) {
                     $result = ['state' => 'false', 'error' => $assig];
-                    \Yii::$app->response->format = 'json';
                     return $result;
                 } else {
                     $result = ['state' => 'success', 'error' => ''];
-                    \Yii::$app->response->format = 'json';
                     return $result;
                 }
             } else {
                 $result = ['state' => 'false', 'error' => Html::errorSummary($model)];
-                \Yii::$app->response->format = 'json';
                 return $result;
             }
         }

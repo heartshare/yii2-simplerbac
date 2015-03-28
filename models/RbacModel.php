@@ -327,11 +327,12 @@ class RbacModel extends Model{
     /**
      * @return bool
      */
-    public function existValidate()
+    public function existValidate($attribute, $params)
     {
         if (Yii::$app->authManager->getRole($this->name, self::TYPE_ROLE) or Yii::$app->authManager->getPermission($this->name, self::TYPE_PERMISSION)) {
             return true;
         } else {
+            $this->addError($attribute,RbacModule::t('simplerbac','Item not exists'));
             return false;
         }
     }
@@ -339,9 +340,10 @@ class RbacModel extends Model{
     /**
      * @return bool
      */
-    public function noexistValidate()
+    public function noexistValidate($attribute, $params)
     {
         if (Yii::$app->authManager->getRole($this->name, self::TYPE_ROLE) or Yii::$app->authManager->getPermission($this->name, self::TYPE_PERMISSION)) {
+            $this->addError($attribute, RbacModule::t('simplerbac','Item also exists'));
             return false;
         } else {
             return true;
@@ -351,13 +353,14 @@ class RbacModel extends Model{
     /**
      * @return bool
      */
-    public function childValidate()
+    public function childValidate($attribute, $params)
     {
-        if (!$this->new_child) {
+        if (!$this->$attribute) {
             return false;
         }
-        list($name, $type) = explode('_t', $this->new_child);
+        list($name, $type) = explode('_t', $this->$attribute);
         if (!$this->getItem($name, $type)) {
+            $this->addError($attribute, 'Item Not Exists');
             return false;
         } else {
             return true;
