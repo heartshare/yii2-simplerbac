@@ -258,7 +258,7 @@ class DefaultController extends Controller
     }
 
     public function actionConvert(){
-        $this->removeAll();
+        \Yii::$app->authManager->removeAll();
         \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(\Yii::$app->authManager->itemFile),'items');
         \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(Yii::$app->authManager->ruleFile),'rules');
         \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(\Yii::$app->authManager->assignmentFile),'assignments');

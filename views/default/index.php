@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div>
 </div>
-<div class="pull-right"><?= Html::a('<i class="fa fa-4x arrow-circle-o-up"></i>','#rbacform', ['class' => 'totop']) ?></div>
+<div class="pull-right offset-1" id="totop"><?= Html::button('<i class="fa fa-4x fa-arrow-circle-o-up"></i>',[]) ?></div>
 <?php
 $js = <<<JS
 $(document).on('rbacitem_update',function(){
@@ -73,6 +73,9 @@ $(document).on('rbacitem_update',function(){
 $(document).on('click','button.aj',function(e){
   e.preventDefault();
   $(this).rbacManage('send', '#ldr');
+});
+$(document).on('click','#totop',function(e){
+  $(this).rbacManage('scroll', '#rbacform');
 });
 $(document).on('click','button.unchild',function(e){
   e.preventDefault();
