@@ -178,7 +178,7 @@ class DefaultController extends Controller
             $model->populateItem($item);
              $result = [
                 'state' => 'success',
-                'result' => $this->renderAjax('_itemform', ['model' => $model])
+                'result' => $this->renderAjax('_editform', ['model' => $model])
             ];
             return $result;
         } else {
@@ -202,7 +202,7 @@ class DefaultController extends Controller
             return $result;
         } else {
             $error = Html::errorSummary($model);
-            $result = ['state' => 'error', 'error' => $error];
+            $result = ['state' => 'error', 'error' =>  $model->scenario.$error];
             return $result;
         }
     }

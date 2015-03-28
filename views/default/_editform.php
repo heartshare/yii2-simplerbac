@@ -29,10 +29,16 @@ use insolita\simplerbac\RbacModule;
         ]
     ); ?>
     <div class="alert alert-danger" id="add-error" style="display: none;">...</div>
-    <li class="list-group-item"><?= $model->name; ?></li>
+    <?= $form->field($model, 'name')->textInput(['disabled'=>true,'name'=>'oldname']) ?>
+    <?= $form->field($model, 'name')->hiddenInput()->label(false) ?>
     <?= $form->field($model, 'description') ?>
-    <input type="hidden" name="RbacModel[type]" value="<?= $model->type; ?>">
-    <input type="hidden" name="RbacModel[name]" value="<?= $model->name; ?>">
+    <?= $form->field($model, 'type')->dropDownList(
+        [
+            RbacModel::TYPE_ROLE => Yii::t('app', 'Роль', [], 'ru'),
+            RbacModel::TYPE_PERMISSION => RbacModule::t('simplerbac','Операция')
+        ],['disabled'=>true,'name'=>'oldtype']
+    ) ?>
+    <?= $form->field($model, 'type')->hiddenInput()->label(false) ?>
 
     <div class="form-group">
         <?= Html::submitButton(

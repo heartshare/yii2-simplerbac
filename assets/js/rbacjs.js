@@ -81,7 +81,8 @@
 							console.log('fire trigger '+trigger);
 							$(document).trigger(trigger);
 						}
-						document.getElementById(id).reset();
+						var f=document.getElementById(id);
+						if(f){f.reset()};
 					} else if (err_target) {
 						$(err_target).show();
 						$(err_target).html(response.error);

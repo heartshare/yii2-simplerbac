@@ -176,6 +176,39 @@ class RbacModel extends Model
     }
 
     /**
+     * @return bool
+     */
+    public function existValidate($attribute, $params)
+    {
+        if ($this->getItem($this->name, self::TYPE_ROLE) or $this->getItem(
+                $this->name, self::TYPE_PERMISSION
+            )
+        ) {
+            return true;
+        } else {
+            $this->addError($attribute, RbacModule::t('simplerbac', 'Item not exists'));
+            return false;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function noexistValidate($attribute, $params)
+    {
+        if (Yii::$app->authManager->getRole($this->name, self::TYPE_ROLE) or Yii::$app->authManager->getPermission(
+                $this->name, self::TYPE_PERMISSION
+            )
+        ) {
+            $this->addError($attribute, RbacModule::t('simplerbac', 'Item also exists'));
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    /**
      * @return array
      */
     public function scenarios()
@@ -335,37 +368,6 @@ class RbacModel extends Model
         return $this->_parents;
     }
 
-    /**
-     * @return bool
-     */
-    public function existValidate($attribute, $params)
-    {
-        if (Yii::$app->authManager->getRole($this->name, self::TYPE_ROLE) or Yii::$app->authManager->getPermission(
-                $this->name, self::TYPE_PERMISSION
-            )
-        ) {
-            return true;
-        } else {
-            $this->addError($attribute, RbacModule::t('simplerbac', 'Item not exists'));
-            return false;
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    public function noexistValidate($attribute, $params)
-    {
-        if (Yii::$app->authManager->getRole($this->name, self::TYPE_ROLE) or Yii::$app->authManager->getPermission(
-                $this->name, self::TYPE_PERMISSION
-            )
-        ) {
-            $this->addError($attribute, RbacModule::t('simplerbac', 'Item also exists'));
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     /**
      * @return bool
