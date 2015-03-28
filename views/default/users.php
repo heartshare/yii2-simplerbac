@@ -40,20 +40,16 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 $js
     = <<<JS
+$('[rel="popover"]').popover();
 $(document).on('modalform_submitted',function(){
   $("div#Assigs .modal-body").html('');
   $("#Assigs").modal('hide');
   $.pjax.reload({container:'#userpjax'});
 });
 $(document).on("click","[data-action]",function(e) {
-e.preventDefault();
-$(this).rbacManage('send', '#ldr');
+   e.preventDefault();
+   $(this).rbacManage('send', '#ldr');
 });
-$('#Assigs').on('hidden.bs.modal', function (e) {
-  $("div#Assigs .modal-body").html('');
-});
-$('[rel="popover"]').popover();
-
  $(document).on('submit',"form#userassign-form",function(e){
  e.preventDefault();
   $(this).rbacManage('sendform', '#ldr');
