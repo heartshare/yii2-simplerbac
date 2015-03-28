@@ -34,7 +34,7 @@ use insolita\simplerbac\RbacModule;
     <?= $form->field($model, 'forassign')->dropDownList($model->getItemsForAssignUser($user->{Yii::$app->getModule('simplerbac')->userPk})); ?>
     <div class="form-group">
         <?= Html::submitButton(
-            RbacModule::t('simplerbac','Привязать'),
+            RbacModule::t('simplerbac','Update'),
             ['class' => 'btn btn-primary userassign', 'data-pjax' => 1]
         ) ?>
     </div>

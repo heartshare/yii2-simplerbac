@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= Html::a(RbacModule::t('simplerbac', 'Roles and operations'), ['/simplerbac/default/index'], ['class' => 'btn btn-primary']) ?>
     <div class="rbacuser-index">
         <div class="page-header"><h1><?= Html::encode($this->title) ?></h1></div>
-        <?php \yii\widgets\Pjax::begin(['id' => 'userpjax']); ?>
+        <?php \yii\widgets\Pjax::begin(['id' => 'userpjax','timeout'=>5000]); ?>
         <?= $this->render('_usergrid', ['model' => $model, 'dataProvider' => $dataProvider]); ?>
         <?php \yii\widgets\Pjax::end(); ?>
     </div>

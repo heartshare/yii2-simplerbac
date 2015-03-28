@@ -33,8 +33,9 @@ class RbacModule extends \yii\base\Module {
     public $usernameAttribute='username';
     /**
      * @var bool
+     * public $allowAssignPermissions=false;
      */
-    public $allowAssignPermitions=false;
+
     /**
      * @var array the the internalization configuration for this module
      */
