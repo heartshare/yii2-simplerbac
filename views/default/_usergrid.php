@@ -19,6 +19,17 @@ GridView::widget(
         'columns' => [
             Yii::$app->getModule('simplerbac')->userPk,
             Yii::$app->getModule('simplerbac')->usernameAttribute,
+            'role'=>[ 'format' => 'html',
+                'value' => function ($data) {
+                    return '<span class="label label-success">'
+                    . implode(
+                        '</span><br/><br/><span class="label label-primary">',
+                        insolita\simplerbac\models\RbacModel::getUserRoles(
+                            $data->{Yii::$app->getModule('simplerbac')->userPk}
+                        )
+                    )
+                    . '</span>';
+                }],
             'userperms' => [
                 'format' => 'html',
                 'value' => function ($data) {

@@ -557,6 +557,21 @@ class RbacModel extends Model{
     }
 
     /**
+     * @param integer $userid
+     *
+     * @return array
+     */
+    public static function getUserRoles($userid)
+    {
+        $up = Yii::$app->authManager->getRolesByUser($userid);
+        $userperms = [];
+        if ($up) {
+            $userperms = self::Itemmap($up);
+        }
+
+        return $userperms;
+    }
+    /**
      * @param string $name
      *
      * @return array
