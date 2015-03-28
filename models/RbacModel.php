@@ -125,11 +125,11 @@ class RbacModel extends Model{
             [
                 'name',
                 'match',
-                'pattern' => '/[^A-Za-z0-9\-_]/us',
+                'pattern' => '/[^A-Za-z0-9\-_\*\/]/us',
                 'not' => true,
                 'message' => RbacModule::t('simplerbac',
                     'allowed pattern '
-                ).'[A-Za-z0-9\-_]'
+                ).'[A-Za-z0-9\-_\*\/]'
             ],
             [
                 'name',

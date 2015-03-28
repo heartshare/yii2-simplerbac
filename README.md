@@ -2,6 +2,8 @@ Simple rbac manager
 ===================
 for small data and end-user orientation Allow manage roles and operations, and assign roles to user
 
+[See Demo](http://yii2redis-insolita1.c9.io/ru/simplerbac/default/index.html)
+
 Installation
 ------------
 
