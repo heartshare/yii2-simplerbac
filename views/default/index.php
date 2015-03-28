@@ -14,7 +14,7 @@ $this->title = RbacModule::t('simplerbac', 'Roles and operations');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?= Html::a(RbacModule::t('simplerbac', 'Assign roles'), ['/simplerbac/default/users'], ['class' => 'btn btn-primary']) ?>
-<div class="col-lg-12">
+<div class="col-lg-12" id="pagetop">
     <div class="page-header"><h1><?= RbacModule::t('simplerbac', 'Roles and operations')?></h1></div>
 
     <div class="row">
@@ -75,7 +75,7 @@ $(document).on('click','button.aj',function(e){
   $(this).rbacManage('send', '#ldr');
 });
 $(document).on('click','#totop',function(e){
-  $(this).rbacManage('scroll', '#rbacform');
+  $(this).rbacManage('scroll', '#pagetop');
 });
 $(document).on('click','button.unchild',function(e){
   e.preventDefault();
