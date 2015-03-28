@@ -17,6 +17,12 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Cant inherit from this item' => '',
+    'RBAC Graph' => '',
+    'User Graph' => '',
+    'Users Graph' => '',
+    'Добавить' => '',
+    'Операция' => '',
     'Add' => 'Добавить',
     'Add Item' => 'Добавить элемент',
     'All Roles' => 'Все роли',
@@ -52,8 +58,4 @@ return [
     'Updated' => 'Изменено',
     'allowed pattern ' => 'допустимый шаблон',
     'rule' => 'Правило',
-    'Cant inherit from this item' => 'Невозможно унаследовать этот элемент',
-    'RBAC Graph' => '',
-    'User Graph' => '',
-    'Users Graph' => '',
 ];

@@ -10,10 +10,10 @@ namespace insolita\simplerbac\models;
 
 
 use insolita\simplerbac\RbacModule;
+use Yii;
 use yii\base\Event;
 use yii\base\Exception;
 use yii\base\Model;
-use Yii;
 use yii\base\ModelEvent;
 use yii\data\ActiveDataProvider;
 use yii\db\Query;
@@ -21,12 +21,13 @@ use yii\rbac\Assignment;
 use yii\rbac\DbManager;
 use yii\rbac\PhpManager;
 
-class RbacModel extends Model{
+class RbacModel extends Model
+{
     const TYPE_ROLE = 1;
     const TYPE_PERMISSION = 2;
 
-    const EVENT_BEFORE_ASSIGN='event_before_assign';
-    const EVENT_AFTER_ASSIGN='event_after_assign';
+    const EVENT_BEFORE_ASSIGN = 'event_before_assign';
+    const EVENT_AFTER_ASSIGN = 'event_after_assign';
 
     /**
      * @var integer $type the type of the item. This should be either [[TYPE_ROLE]] or [[TYPE_PERMISSION]].
@@ -113,7 +114,7 @@ class RbacModel extends Model{
     {
         parent::init();
         $this->_authMan = Yii::$app->authManager;
-       // $this->_authMan->init();
+        // $this->_authMan->init();
 
     }
 
@@ -132,42 +133,44 @@ class RbacModel extends Model{
                 'match',
                 'pattern' => '/[^A-Za-z0-9\-_\*\/]/us',
                 'not' => true,
-                'message' => RbacModule::t('simplerbac',
-                    'allowed pattern '
-                ).'[A-Za-z0-9\-_\*\/]'
+                'message' => RbacModule::t(
+                        'simplerbac',
+                        'allowed pattern '
+                    ) . '[A-Za-z0-9\-_\*\/]'
             ],
             [
                 'name',
                 'existValidate',
                 'on' => ['edititem', 'delete', 'view'],
-                'message' => RbacModule::t('simplerbac','Item not exists')
+                'message' => RbacModule::t('simplerbac', 'Item not exists')
             ],
             [
                 'name',
                 'noexistValidate',
                 'on' => ['additem'],
-                'message' => RbacModule::t('simplerbac','Item also exists')
+                'message' => RbacModule::t('simplerbac', 'Item also exists')
             ],
             [
                 'description',
                 'match',
                 'pattern' => '/[^A-Za-zА-Яа-яЁё0-9\s\-]/us',
                 'not' => true,
-                'message' => RbacModule::t('simplerbac',
-                    'allowed pattern '
-                ).'[A-Za-zА-Яа-яЁё0-9- ]'
+                'message' => RbacModule::t(
+                        'simplerbac',
+                        'allowed pattern '
+                    ) . '[A-Za-zА-Яа-яЁё0-9- ]'
             ],
             [
                 ['new_child'],
                 'childValidate',
                 'on' => ['addchild', 'unchild'],
-                'message' => RbacModule::t('simplerbac','Item not exists')
+                'message' => RbacModule::t('simplerbac', 'Item not exists')
             ],
             [
                 ['forassign'],
                 'existValidate',
                 'on' => ['userassign'],
-                'message' => RbacModule::t('simplerbac','Item not exists')
+                'message' => RbacModule::t('simplerbac', 'Item not exists')
             ],
         ];
     }
@@ -194,15 +197,15 @@ class RbacModel extends Model{
     public function attributeLabels()
     {
         return [
-            'name' => RbacModule::t('simplerbac','Item name'),
-            'newname' => RbacModule::t('simplerbac','New name'),
-            'description' => RbacModule::t('simplerbac','Description'),
-            'ruleName' => RbacModule::t('simplerbac','rule'),
-            'createdAt' => RbacModule::t('simplerbac','Created'),
-            'updatedAt' => RbacModule::t('simplerbac','Updated'),
-            'new_child' => RbacModule::t('simplerbac','Inherit from '),
-            'userperms' => RbacModule::t('simplerbac','Operations'),
-            'forassign' => RbacModule::t('simplerbac','Assign role'),
+            'name' => RbacModule::t('simplerbac', 'Item name'),
+            'newname' => RbacModule::t('simplerbac', 'New name'),
+            'description' => RbacModule::t('simplerbac', 'Description'),
+            'ruleName' => RbacModule::t('simplerbac', 'rule'),
+            'createdAt' => RbacModule::t('simplerbac', 'Created'),
+            'updatedAt' => RbacModule::t('simplerbac', 'Updated'),
+            'new_child' => RbacModule::t('simplerbac', 'Inherit from '),
+            'userperms' => RbacModule::t('simplerbac', 'Operations'),
+            'forassign' => RbacModule::t('simplerbac', 'Assign role'),
         ];
     }
 
@@ -212,8 +215,8 @@ class RbacModel extends Model{
     public function getTypenames()
     {
         return [
-            self::TYPE_ROLE => RbacModule::t('simplerbac','Role'),
-            self::TYPE_PERMISSION => RbacModule::t('simplerbac','Operation')
+            self::TYPE_ROLE => RbacModule::t('simplerbac', 'Role'),
+            self::TYPE_PERMISSION => RbacModule::t('simplerbac', 'Operation')
         ];
     }
 
@@ -252,6 +255,14 @@ class RbacModel extends Model{
         $item = ($type == self::TYPE_ROLE) ? $this->_authMan->getRole($name) : $this->_authMan->getPermission($name);
         return $item;
     }
+
+    /**
+     * @param \yii\rbac\Role|\yii\rbac\Permission $item
+     *
+     */
+    public function populateItem($item){
+        $this->setAttributes(['name'=>$item->name,'type'=>$item->type,'description'=>$item->description,'createdAt'=>$item->createdAt, 'updatedAt'=>$item->updatedAt]);
+     }
 
     /**
      * @return array
@@ -329,10 +340,13 @@ class RbacModel extends Model{
      */
     public function existValidate($attribute, $params)
     {
-        if (Yii::$app->authManager->getRole($this->name, self::TYPE_ROLE) or Yii::$app->authManager->getPermission($this->name, self::TYPE_PERMISSION)) {
+        if (Yii::$app->authManager->getRole($this->name, self::TYPE_ROLE) or Yii::$app->authManager->getPermission(
+                $this->name, self::TYPE_PERMISSION
+            )
+        ) {
             return true;
         } else {
-            $this->addError($attribute,RbacModule::t('simplerbac','Item not exists'));
+            $this->addError($attribute, RbacModule::t('simplerbac', 'Item not exists'));
             return false;
         }
     }
@@ -342,8 +356,11 @@ class RbacModel extends Model{
      */
     public function noexistValidate($attribute, $params)
     {
-        if (Yii::$app->authManager->getRole($this->name, self::TYPE_ROLE) or Yii::$app->authManager->getPermission($this->name, self::TYPE_PERMISSION)) {
-            $this->addError($attribute, RbacModule::t('simplerbac','Item also exists'));
+        if (Yii::$app->authManager->getRole($this->name, self::TYPE_ROLE) or Yii::$app->authManager->getPermission(
+                $this->name, self::TYPE_PERMISSION
+            )
+        ) {
+            $this->addError($attribute, RbacModule::t('simplerbac', 'Item also exists'));
             return false;
         } else {
             return true;
@@ -374,9 +391,9 @@ class RbacModel extends Model{
     {
         try {
             $item = ($this->type == self::TYPE_ROLE)
-                    ? $this->_authMan->createRole($this->name)
-                    :
-                    $this->_authMan->createPermission($this->name);
+                ? $this->_authMan->createRole($this->name)
+                :
+                $this->_authMan->createPermission($this->name);
             $item->name = $this->name;
             $item->type = $this->type;
             $item->description = $this->description;
@@ -384,11 +401,11 @@ class RbacModel extends Model{
             $item->updatedAt = time();
             $this->_authMan->add($item);
             return true;
-        }catch (\yii\db\Exception $e){
-            if($e->getCode()==23000){
-                $this->addError('name', RbacModule::t('simplerbac','Item also exists'));
-            }else{
-                $this->addError('name', 'Error '.$e->getName().' #'.$e->getCode());
+        } catch (\yii\db\Exception $e) {
+            if ($e->getCode() == 23000) {
+                $this->addError('name', RbacModule::t('simplerbac', 'Item also exists'));
+            } else {
+                $this->addError('name', 'Error ' . $e->getName() . ' #' . $e->getCode());
             }
             return false;
         }
@@ -403,7 +420,7 @@ class RbacModel extends Model{
         $item->description = $this->description;
         $item->updatedAt = time();
         $this->_authMan->update($item->name, $item);
-       // sleep(3); //necessary sleep time  - wait while update auth file
+        // sleep(3); //necessary sleep time  - wait while update auth file
     }
 
     /**
@@ -412,7 +429,7 @@ class RbacModel extends Model{
     public function deleteItem()
     {
         $item = $this->getItem($this->name, $this->type);
-        if($item){
+        if ($item) {
             $this->_authMan->remove($item);
         }
     }
@@ -427,10 +444,10 @@ class RbacModel extends Model{
         $child = $this->getItem($childname, $childtype);
         try {
             $this->_authMan->addChild($item, $child);
-          //  sleep(3); //necessary sleep time  - wait while update auth file
+            //  sleep(3); //necessary sleep time  - wait while update auth file
             return true;
         } catch (\yii\base\InvalidCallException $e) {
-            return RbacModule::t('simplerbac','Can`t inherit from this item');
+            return RbacModule::t('simplerbac', 'Can`t inherit from this item');
         }
     }
 
@@ -443,7 +460,7 @@ class RbacModel extends Model{
         list($childname, $childtype) = explode('_t', $this->new_child);
         $child = $this->getItem($childname, $childtype);
         if ($child && $this->_authMan->removeChild($item, $child)) {
-           // sleep(3); //necessary sleep time  - wait while update auth file
+            // sleep(3); //necessary sleep time  - wait while update auth file
             return true;
         } else {
             return false;
@@ -464,19 +481,19 @@ class RbacModel extends Model{
         $oldroles = $this->_authMan->getRolesByUser($userid);
         $this->_authMan->revokeAll($userid);
         try {
-               if($this->beforeAssign($userid, $role, $oldroles)){
-                   $this->_authMan->assign($role, $userid);
-                   $this->afterAssign($userid, $role, $oldroles);
-                   return true;
-               }else{
-                   return false;
-               }
+            if ($this->beforeAssign($userid, $role, $oldroles)) {
+                $this->_authMan->assign($role, $userid);
+                $this->afterAssign($userid, $role, $oldroles);
+                return true;
+            } else {
+                return false;
+            }
 
         } catch (\yii\base\Exception $e) {
             foreach ($oldroles as $orole) {
                 $this->_authMan->assign($orole, $userid);
             }
-            return RbacModule::t('simplerbac','Can`t assign this item for this user');
+            return RbacModule::t('simplerbac', 'Can`t assign this item for this user');
         }
     }
 
@@ -531,35 +548,42 @@ class RbacModel extends Model{
         $allroles = $this->getRoles();
         foreach ($allroles as $ap) {
             if (!$this->_authMan->getAssignment($ap->name, $userid)) {
-                $assig_items[$ap->name] = $ap->description.' '.$ap->name;
+                $assig_items[$ap->name] = $ap->description . ' ' . $ap->name;
             }
 
         }
         return $assig_items;
     }
 
-    public static function getAllAssignments(){
-        $man=Yii::$app->authManager;
-        if($man instanceof PhpManager){
-            $reflector=new \ReflectionClass($man::className());
-            $ass=$reflector->getProperty('assignments');
+    /**
+     * @return array|mixed|\ReflectionProperty
+     * @throws Exception
+     */
+    public static function getAllAssignments()
+    {
+        $man = Yii::$app->authManager;
+        if ($man instanceof PhpManager) {
+            $reflector = new \ReflectionClass($man::className());
+            $ass = $reflector->getProperty('assignments');
             $ass->setAccessible(true);
-            $ass=$ass->getValue($man);
+            $ass = $ass->getValue($man);
             return $ass;
-        }elseif($man instanceof DbManager){
+        } elseif ($man instanceof DbManager) {
             $query = (new Query())
                 ->from($man->assignmentTable);
             $assignments = [];
             foreach ($query->all($man->db) as $row) {
-                $assignments[$row['user_id']][$row['item_name']] = new Assignment([
-                    'userId' => $row['user_id'],
-                    'roleName' => $row['item_name'],
-                    'createdAt' => $row['created_at'],
-                ]);
+                $assignments[$row['user_id']][$row['item_name']] = new Assignment(
+                    [
+                        'userId' => $row['user_id'],
+                        'roleName' => $row['item_name'],
+                        'createdAt' => $row['created_at'],
+                    ]
+                );
             }
 
             return $assignments;
-        }else{
+        } else {
             throw new Exception('Not supported for Rbac AuthManager type');
 
         }
@@ -575,7 +599,7 @@ class RbacModel extends Model{
     {
         $userClass = Yii::$app->getModule('simplerbac')->userClass;
         $pk = Yii::$app->getModule('simplerbac')->userPk;
-        $username=Yii::$app->getModule('simplerbac')->usernameAttribute;
+        $username = Yii::$app->getModule('simplerbac')->usernameAttribute;
         $usermodel = new $userClass;
         $query = $userClass::find();
 
@@ -615,6 +639,7 @@ class RbacModel extends Model{
 
         return $userperms;
     }
+
     /**
      * @param string $name
      *
@@ -647,16 +672,18 @@ class RbacModel extends Model{
         return $userperms;
     }
 
-    protected function beforeAssign($userid, $role, $oldroles){
-        $event=new ModelEvent();
-        $event->data=['userid'=>$userid, 'role'=>$role, 'oldroles'=>$oldroles];
-        $this->trigger(self::EVENT_BEFORE_ASSIGN,$event);
+    protected function beforeAssign($userid, $role, $oldroles)
+    {
+        $event = new ModelEvent();
+        $event->data = ['userid' => $userid, 'role' => $role, 'oldroles' => $oldroles];
+        $this->trigger(self::EVENT_BEFORE_ASSIGN, $event);
         return $event->isValid;
     }
 
-    protected function afterAssign($userid, $role, $oldroles){
-        $event=new Event();
-        $event->data=['userid'=>$userid, 'role'=>$role, 'oldroles'=>$oldroles];
-        $this->trigger(self::EVENT_BEFORE_ASSIGN,$event);
+    protected function afterAssign($userid, $role, $oldroles)
+    {
+        $event = new Event();
+        $event->data = ['userid' => $userid, 'role' => $role, 'oldroles' => $oldroles];
+        $this->trigger(self::EVENT_BEFORE_ASSIGN, $event);
     }
 }

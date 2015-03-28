@@ -12,8 +12,8 @@ use insolita\simplerbac\models\RbacModel;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Json;
-use yii\helpers\VarDumper;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class DefaultController extends Controller
@@ -63,7 +63,7 @@ class DefaultController extends Controller
     {
         $model = new RbacModel();
         $model->scenario = 'additem';
-        if ($model->load(\Yii::$app->request->post()) && $model->validate() &&  $model->saveItem()) {
+        if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->saveItem()) {
             $result = ['state' => 'success'];
             return $result;
         } else {
@@ -114,7 +114,7 @@ class DefaultController extends Controller
             } else {
                 $result = [
                     'state' => 'error',
-                    'error' => \insolita\simplerbac\RbacModule::t('simplerbac','Cant inherit from this item')
+                    'error' => \insolita\simplerbac\RbacModule::t('simplerbac', 'Cant inherit from this item')
                 ];
                 return $result;
             }
@@ -173,8 +173,10 @@ class DefaultController extends Controller
     {
         $model = new RbacModel();
         $model->scenario = 'edititem';
-        if ($model->load(\Yii::$app->request->post(), '')) {
-            $result = [
+        $item=$model->getItem(\Yii::$app->request->post('name'), \Yii::$app->request->post('type'));
+        if ($item) {
+            $model->populateItem($item);
+             $result = [
                 'state' => 'success',
                 'result' => $this->renderAjax('_itemform', ['model' => $model])
             ];
@@ -252,7 +254,7 @@ class DefaultController extends Controller
                 return $result;
             }
         }
-        return ['state' => 'success', 'result'=>$this->renderAjax('_assign', ['model' => $model, 'user' => $user])];
+        return ['state' => 'success', 'result' => $this->renderAjax('_assign', ['model' => $model, 'user' => $user])];
     }
 
     public function actionConvert()
@@ -273,7 +275,8 @@ class DefaultController extends Controller
         foreach ($roles as $rol) {
             $nodes[] = [
                 'data' => [
-                    'id' => $rol->name, 'type' => $rol->type, 'faveColor' => '#5F40B8', 'faveShape' => 'triangle', 'width'=>mb_strlen($rol->name)
+                    'id' => $rol->name, 'type' => $rol->type, 'faveColor' => '#5F40B8', 'faveShape' => 'triangle',
+                    'width' => mb_strlen($rol->name)
                 ]
             ];
             $childs = \Yii::$app->authManager->getChildren($rol->name);
@@ -295,7 +298,8 @@ class DefaultController extends Controller
         foreach ($permissions as $perm) {
             $nodes[] = [
                 'data' => [
-                    'id' => $perm->name, 'type' => $perm->type, 'faveColor' => '#3AB5E1', 'faveShape' => 'pentagon', 'width'=>mb_strlen($perm->name)
+                    'id' => $perm->name, 'type' => $perm->type, 'faveColor' => '#3AB5E1', 'faveShape' => 'pentagon',
+                    'width' => mb_strlen($perm->name)
                 ]
             ];
             $childs = \Yii::$app->authManager->getChildren($perm->name);
@@ -312,7 +316,7 @@ class DefaultController extends Controller
                 }
             }
         }
-         return $this->render('graph', ['elems' => Json::encode(['nodes' => $nodes, 'edges' => $edges])]);
+        return $this->render('graph', ['elems' => Json::encode(['nodes' => $nodes, 'edges' => $edges])]);
     }
 
     public function actionAllUsers()
@@ -322,44 +326,46 @@ class DefaultController extends Controller
         $uids = array_keys($assignments);
         $uClass = $this->module->userClass;
         $users = $uClass::find()
-           // ->select([$this->module->userPk, $this->module->usernameAttribute])  //in redis Ar not supported
+            // ->select([$this->module->userPk, $this->module->usernameAttribute])  //in redis Ar not supported
             ->where([$this->module->userPk => $uids])
             ->indexBy($this->module->userPk)->asArray()->all();
         foreach ($assignments as $uid => $data) {
             $nodes[] = [
                 'data' => [
                     'id' => "u$uid", 'username' => $users[$uid][$this->module->usernameAttribute],
-                    'faveColor' => '#E13A69', 'faveShape' => 'ellipse', 'width'=>mb_strlen($users[$uid][$this->module->usernameAttribute])
+                    'faveColor' => '#E13A69', 'faveShape' => 'ellipse',
+                    'width' => mb_strlen($users[$uid][$this->module->usernameAttribute])
                 ]
             ];
             $roles = \Yii::$app->authManager->getRolesByUser($uid);
-            if(!empty($roles)){
+            if (!empty($roles)) {
                 foreach ($roles as $rol) {
                     $nodes[] = [
                         'data' => [
-                            'id' => $rol->name, 'faveColor' => '#5F40B8', 'faveShape' => 'star', 'width'=>mb_strlen($rol->name)
+                            'id' => $rol->name, 'faveColor' => '#5F40B8', 'faveShape' => 'star',
+                            'width' => mb_strlen($rol->name)
                         ]
                     ];
                     $edges[] = [
                         'data' => [
-                            "id"=>$rol->name.'_'."$uid",
+                            "id" => $rol->name . '_' . "$uid",
                             'source' => $rol->name,
                             'target' => "u$uid",
                             'faveColor' => '#5F40B8'
                         ]
                     ];
                     $perms = \Yii::$app->authManager->getPermissionsByRole($rol->name);
-                    if(!empty($perms)){
+                    if (!empty($perms)) {
                         foreach ($perms as $p) {
                             $nodes[] = [
                                 'data' => [
                                     'id' => $p->name, 'faveColor' => '#3AB5E1',
-                                    'faveShape' => 'rectangle', 'width'=>mb_strlen($p->name)
+                                    'faveShape' => 'rectangle', 'width' => mb_strlen($p->name)
                                 ]
                             ];
                             $edges[] = [
                                 'data' => [
-                                    "id"=>$p->name.'_'.$rol->name,
+                                    "id" => $p->name . '_' . $rol->name,
                                     'source' => $p->name,
                                     'target' => $rol->name,
                                     'faveColor' => '#3AB5E1'
