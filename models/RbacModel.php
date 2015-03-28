@@ -112,8 +112,9 @@ class RbacModel extends Model{
     public function init()
     {
         parent::init();
+        Yii::$app->authManager->cache=null;
         $this->_authMan = Yii::$app->authManager;
-        $this->_authMan->init();
+       // $this->_authMan->init();
 
     }
 
@@ -329,10 +330,10 @@ class RbacModel extends Model{
      */
     public function existValidate()
     {
-        if (!$this->getItem($this->name, self::TYPE_ROLE) or !$this->getItem($this->name, self::TYPE_PERMISSION)) {
-            return false;
-        } else {
+        if (Yii::$app->authManager->getRole($this->name, self::TYPE_ROLE) or Yii::$app->authManager->getPermission($this->name, self::TYPE_PERMISSION)) {
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -341,10 +342,10 @@ class RbacModel extends Model{
      */
     public function noexistValidate()
     {
-        if (!$this->getItem($this->name, self::TYPE_ROLE) and !$this->getItem($this->name, self::TYPE_PERMISSION)) {
-            return true;
-        } else {
+        if (Yii::$app->authManager->getRole($this->name, self::TYPE_ROLE) or Yii::$app->authManager->getPermission($this->name, self::TYPE_PERMISSION)) {
             return false;
+        } else {
+            return true;
         }
     }
 
@@ -369,18 +370,26 @@ class RbacModel extends Model{
      */
     public function saveItem()
     {
-        $item = ($this->type == self::TYPE_ROLE)
-            ? $this->_authMan->createRole($this->name)
-            :
-            $this->_authMan->createPermission($this->name);
-        $item->name = $this->name;
-        $item->type = $this->type;
-        $item->description = $this->description;
-        $item->createdAt = time();
-        $item->updatedAt = time();
-        if ($this->_authMan->add($item)) {
-            //sleep(3);
-        }  
+        try {
+            $item = ($this->type == self::TYPE_ROLE)
+                    ? $this->_authMan->createRole($this->name)
+                    :
+                    $this->_authMan->createPermission($this->name);
+            $item->name = $this->name;
+            $item->type = $this->type;
+            $item->description = $this->description;
+            $item->createdAt = time();
+            $item->updatedAt = time();
+            $this->_authMan->add($item);
+            return true;
+        }catch (\yii\db\Exception $e){
+            if($e->getCode()==23000){
+                $this->addError('name', RbacModule::t('simplerbac','Item also exists'));
+            }else{
+                $this->addError('name', 'Error '.$e->getName().' #'.$e->getCode());
+            }
+            return false;
+        }
     }
 
     /**

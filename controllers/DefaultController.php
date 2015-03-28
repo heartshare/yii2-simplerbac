@@ -63,9 +63,7 @@ class DefaultController extends Controller
     {
         $model = new RbacModel();
         $model->scenario = 'additem';
-        $model->load(\Yii::$app->request->post());
-        if ($model->validate()) {
-            $model->saveItem();
+        if ($model->load(\Yii::$app->request->post()) && $model->validate() &&  $model->saveItem()) {
             $result = ['state' => 'success'];
             return $result;
         } else {
@@ -80,8 +78,7 @@ class DefaultController extends Controller
     {
         $model = new RbacModel();
         $model->scenario = 'addchild';
-        $model->load(\Yii::$app->request->post());
-        if ($model->validate()) {
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             if ($model->addChild() === true) {
                 $item = $model->getItem($model->name, $model->type);
                 $model->description = $item->description;
@@ -117,7 +114,7 @@ class DefaultController extends Controller
             } else {
                 $result = [
                     'state' => 'error',
-                    'error' => \insolita\simplerbac\Module::t('Нельзя унаследовать от этого элемента')
+                    'error' => \insolita\simplerbac\RbacModule::t('simplerbac','Cant inherit from this item')
                 ];
                 return $result;
             }
