@@ -258,12 +258,10 @@ class DefaultController extends Controller
     }
 
     public function actionConvert(){
-        $items='@app/rbac/rbac.php';
-        $rules='@app/rbac/rules.php';
-        $assignments='@app/rbac/assignments.php';
-        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias($items),'items');
-        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias($rules),'rules');
-        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias($assignments),'assignments');
+        $this->removeAll();
+        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(\Yii::$app->authManager->itemFile),'items');
+        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(Yii::$app->authManager->ruleFile),'rules');
+        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(\Yii::$app->authManager->assignmentFile),'assignments');
         return $this->redirect(['index']);
     }
 
