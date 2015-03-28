@@ -31,7 +31,8 @@ $this->registerCss('#cy {
   width: 90%;
   position: absolute;
   left: 0;
-  top: 100;
+  top: 70;
+  bottom:15;
 }');
 
 $js = <<<JS
@@ -48,7 +49,7 @@ var elems=$elems;
         .selector('node')
           .css({
             'shape': 'data(faveShape)',
-            'width': 'mapData(35, 40, 80, 20, 60)',
+            'width': 'mapData(data(width), 1, 10, 1, 10)',
             'content': 'data(id)',
             'text-valign': 'center',
             'text-outline-width': 2,
@@ -57,9 +58,9 @@ var elems=$elems;
             'color': '#fff'
           })
         .selector(':selected')
-          .css({
-            'border-width': 3,
-            'border-color': '#333'
+           .css({
+            'border-width': 7,
+            'border-color': 'yellow'
           })
         .selector('edge')
           .css({
@@ -70,11 +71,6 @@ var elems=$elems;
             'line-color': 'data(faveColor)',
             'source-arrow-color': 'data(faveColor)',
             'target-arrow-color': 'data(faveColor)'
-          })
-        .selector('edge.questionable')
-          .css({
-            'line-style': 'dotted',
-            'target-arrow-shape': 'diamond'
           }),
 
 

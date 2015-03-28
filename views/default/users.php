@@ -12,9 +12,10 @@ use insolita\simplerbac\RbacModule;
 $this->title = RbacModule::t('simplerbac','Assign Roles');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?= Html::a(RbacModule::t('simplerbac', 'Roles and operations'), ['/simplerbac/default/index'], ['class' => 'btn btn-primary']) ?>
-<?= Html::a(RbacModule::t('simplerbac', 'Assign roles'), ['/simplerbac/default/users'], ['class' => 'btn btn-primary']) ?>
-<?= Html::a(RbacModule::t('simplerbac', 'RBAC Graph'), ['/simplerbac/default/all-items'], ['class' => 'btn btn-primary']) ?>
+<?= Html::a(RbacModule::t('simplerbac', 'Roles and operations'), ['/simplerbac/default/index'], ['class' => 'btn btn-primary']) ?> &nbsp;
+<?= Html::a(RbacModule::t('simplerbac', 'Assign roles'), ['/simplerbac/default/users'], ['class' => 'btn btn-primary']) ?> &nbsp;
+<?= Html::a(RbacModule::t('simplerbac', 'RBAC Graph'), ['/simplerbac/default/all-items'], ['class' => 'btn btn-primary']) ?> &nbsp;
+<?= Html::a(RbacModule::t('simplerbac', 'Users Graph'), ['/simplerbac/default/all-users'], ['class' => 'btn btn-primary']) ?>
 
     <div class="rbacuser-index">
         <div class="page-header"><h1><?= Html::encode($this->title) ?></h1></div>

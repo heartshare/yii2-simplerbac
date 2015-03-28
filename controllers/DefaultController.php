@@ -275,7 +275,7 @@ class DefaultController extends Controller
         foreach ($roles as $rol) {
             $nodes[] = [
                 'data' => [
-                    'id' => $rol->name, 'type' => $rol->type, 'faveColor' => '#5F40B8', 'faveShape' => 'triangle'
+                    'id' => $rol->name, 'type' => $rol->type, 'faveColor' => '#5F40B8', 'faveShape' => 'triangle', 'width'=>mb_strlen($rol->name)
                 ]
             ];
             $childs = \Yii::$app->authManager->getChildren($rol->name);
@@ -297,7 +297,7 @@ class DefaultController extends Controller
         foreach ($permissions as $perm) {
             $nodes[] = [
                 'data' => [
-                    'id' => $perm->name, 'type' => $perm->type, 'faveColor' => '#3AB5E1', 'faveShape' => 'pentagon'
+                    'id' => $perm->name, 'type' => $perm->type, 'faveColor' => '#3AB5E1', 'faveShape' => 'pentagon', 'width'=>mb_strlen($perm->name)
                 ]
             ];
             $childs = \Yii::$app->authManager->getChildren($perm->name);
@@ -331,7 +331,7 @@ class DefaultController extends Controller
             $nodes[] = [
                 'data' => [
                     'id' => "u$uid", 'username' => $users[$uid][$this->module->usernameAttribute],
-                    'faveColor' => '#E13A69', 'faveShape' => 'ellipse'
+                    'faveColor' => '#E13A69', 'faveShape' => 'ellipse', 'width'=>mb_strlen($users[$uid][$this->module->usernameAttribute])
                 ]
             ];
             $roles = \Yii::$app->authManager->getRolesByUser($uid);
@@ -339,7 +339,7 @@ class DefaultController extends Controller
                 foreach ($roles as $rol) {
                     $nodes[] = [
                         'data' => [
-                            'id' => $rol->name, 'faveColor' => '#5F40B8', 'faveShape' => 'star'
+                            'id' => $rol->name, 'faveColor' => '#5F40B8', 'faveShape' => 'star', 'width'=>mb_strlen($rol->name)
                         ]
                     ];
                     $edges[] = [
@@ -356,7 +356,7 @@ class DefaultController extends Controller
                             $nodes[] = [
                                 'data' => [
                                     'id' => $p->name, 'faveColor' => '#3AB5E1',
-                                    'faveShape' => 'rectangle'
+                                    'faveShape' => 'rectangle', 'width'=>mb_strlen($p->name)
                                 ]
                             ];
                             $edges[] = [
