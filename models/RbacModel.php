@@ -112,7 +112,6 @@ class RbacModel extends Model{
     public function init()
     {
         parent::init();
-        Yii::$app->authManager->cache=null;
         $this->_authMan = Yii::$app->authManager;
        // $this->_authMan->init();
 

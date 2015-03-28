@@ -2,7 +2,8 @@ Simple rbac manager
 ===================
 Intuitive, cute, ajax, for not large volumes of data and end-user oriented.
 Allow manage roles and operations, and assign roles to user
-Can show data as graph
+Can show data as graph.
+Compatible with yii\rbac\phpManager yii\rbac\DbManager insolita\redisedrbac\components\RedisedPhpManager
 
 [See Demo](http://yii2redis-insolita1.c9.io/ru/simplerbac/default/index.html)
 
