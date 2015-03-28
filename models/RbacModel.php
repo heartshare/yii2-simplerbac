@@ -16,6 +16,9 @@ use yii\base\Model;
 use Yii;
 use yii\base\ModelEvent;
 use yii\data\ActiveDataProvider;
+use yii\db\Query;
+use yii\rbac\Assignment;
+use yii\rbac\DbManager;
 use yii\rbac\PhpManager;
 
 class RbacModel extends Model{
@@ -532,8 +535,22 @@ class RbacModel extends Model{
             $ass->setAccessible(true);
             $ass=$ass->getValue($man);
             return $ass;
+        }elseif($man instanceof DbManager){
+            $query = (new Query())
+                ->from($man->assignmentTable);
+            $assignments = [];
+            foreach ($query->all($man->db) as $row) {
+                $assignments[$row['user_id']][$row['item_name']] = new Assignment([
+                    'userId' => $row['user_id'],
+                    'roleName' => $row['item_name'],
+                    'createdAt' => $row['created_at'],
+                ]);
+            }
+
+            return $assignments;
         }else{
-            throw new Exception('Not supported for DbManager yet');
+            throw new Exception('Not supported for Rbac AuthManager type');
+
         }
 
     }
