@@ -11,6 +11,7 @@ namespace insolita\simplerbac\controllers;
 use insolita\simplerbac\models\RbacModel;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -26,7 +27,7 @@ class DefaultController extends Controller
         return [
             [
                 'class' => 'yii\filters\ContentNegotiator',
-                'except' => ['index','convert','assign','users'],
+                'except' => ['index','convert','assign','users','all-items'],
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ],
@@ -270,14 +271,15 @@ class DefaultController extends Controller
         $nodes=$edges=[];
         $roles = \Yii::$app->authManager->getRoles();
         foreach($roles as $rol){
-            $nodes[]=['data'=>['id'=>$rol->name,'type'=>$rol->type,'objcolor'=>'#5F40B8']];
+            $nodes[]=['data'=>['id'=>$rol->name,'type'=>$rol->type,'faveColor'=>'#5F40B8','faveShape'=>'triangle']];
             $childs=\Yii::$app->authManager->getChildren($rol->name);
             if(!empty($childs)){
                 foreach ($childs as $childName=>$child) {
                     $edges[] = ['data'=>[
-                        'source' => $rol->name,
-                        'target' => $childName,
-                        'objcolor'=>'#5F40B8'
+                        'source' => $childName,
+                        'target' => $rol->name,
+                        'faveColor'=>'#5F40B8',
+                        'faveShape'=>'ellipse'
                     ]];
                 }
             }
@@ -285,19 +287,20 @@ class DefaultController extends Controller
         }
         $permissions = \Yii::$app->authManager->getPermissions();
         foreach($permissions as $perm){
-            $nodes[]=['id'=>$perm->name,'type'=>$perm->type,'objcolor'=>'#3AB5E1'];
+            $nodes[]=['data'=>['id'=>$perm->name,'type'=>$perm->type,'faveColor'=>'#3AB5E1','faveShape'=>'pentagon']];
             $childs=\Yii::$app->authManager->getChildren($perm->name);
-            if(!empty($childs)){
+           if(!empty($childs)){
                 foreach ($childs as $childName=>$child) {
-                    $edges[] = [
-                        'source' => $perm->name,
-                        'target' => $childName,
-                        'objcolor'=>'#5F40B8'
-                    ];
+                    $edges[] = ['data'=>[
+                        'source' => $childName,
+                        'target' => $perm->name,
+                        'faveColor'=>'#E13A69',
+                        'faveShape'=>'ellipse'
+                    ]];
                 }
             }
         }
-          return  ['elements'=>['nodes'=>$nodes,'edges'=>$edges]];
+          return  $this->render('graph',['elems'=>Json::encode(['nodes'=>$nodes,'edges'=>$edges])]);
     }
 
     /**
