@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div>
 </div>
-<div class="pull-right"><?= Html::a('<i class="fa fa-3x fa-arrow-up"></i>','#rbacform', ['class' => 'totop']) ?></div>
+<div class="pull-right"><?= Html::a('<i class="fa fa-4x arrow-circle-o-up"></i>','#rbacform', ['class' => 'totop']) ?></div>
 <?php
 $js = <<<JS
 $(document).on('rbacitem_update',function(){
