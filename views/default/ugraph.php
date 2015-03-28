@@ -14,13 +14,13 @@ use yii\web\View;
 $this->registerAssetBundle('\yii\web\JqueryAsset', View::POS_HEAD);
 $this->registerAssetBundle('\insolita\simplerbac\assets\CytoscapeAsset', View::POS_HEAD);
 
-$this->title = RbacModule::t('simplerbac', 'RBAC Graph');
+$this->title = RbacModule::t('simplerbac', 'Users Graph');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?= Html::a(RbacModule::t('simplerbac', 'Roles and operations'), ['/simplerbac/default/index'], ['class' => 'btn btn-primary']) ?>&nbsp;
-<?= Html::a(RbacModule::t('simplerbac', 'Assign roles'), ['/simplerbac/default/users'], ['class' => 'btn btn-primary']) ?>&nbsp;
-<?= Html::a(RbacModule::t('simplerbac', 'RBAC Graph'), ['/simplerbac/default/all-items'], ['class' => 'btn btn-primary']) ?>&nbsp;
-<?= Html::a(RbacModule::t('simplerbac', 'User Graph'), ['/simplerbac/default/all-users'], ['class' => 'btn btn-primary']) ?>
+<?= Html::a(RbacModule::t('simplerbac', 'Roles and operations'), ['/simplerbac/default/index'], ['class' => 'btn btn-primary']) ?> &nbsp;
+<?= Html::a(RbacModule::t('simplerbac', 'Assign roles'), ['/simplerbac/default/users'], ['class' => 'btn btn-primary']) ?> &nbsp;
+<?= Html::a(RbacModule::t('simplerbac', 'RBAC Graph'), ['/simplerbac/default/all-items'], ['class' => 'btn btn-primary']) ?> &nbsp;
+<?= Html::a(RbacModule::t('simplerbac', 'Users Graph'), ['/simplerbac/default/all-users'], ['class' => 'btn btn-primary']) ?>
 
 <div id="cy">
 
@@ -39,9 +39,9 @@ jQuery(function(){
 var elems=$elems;
     $('#cy').cytoscape({
       layout: {
-         name: 'breadthfirst',
+          name: 'breadthfirst',
         directed: true,
-        padding: 20
+        padding: 15
       },
 
       style: cytoscape.stylesheet()

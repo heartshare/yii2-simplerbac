@@ -12,6 +12,7 @@ use insolita\simplerbac\models\RbacModel;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Json;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -27,7 +28,7 @@ class DefaultController extends Controller
         return [
             [
                 'class' => 'yii\filters\ContentNegotiator',
-                'except' => ['index','convert','assign','users','all-items'],
+                'except' => ['index', 'convert', 'assign', 'users', 'all-items', 'all-users'],
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ],
@@ -97,7 +98,7 @@ class DefaultController extends Controller
 
         } else {
             $error = Html::errorSummary($model);
-            $result = ['state' => 'error',  'error' => $error];
+            $result = ['state' => 'error', 'error' => $error];
             return $result;
         }
     }
@@ -132,14 +133,14 @@ class DefaultController extends Controller
     {
         $model = new RbacModel();
         $model->type = RbacModel::TYPE_ROLE;
-        return ['state' => 'success','result'=>$this->renderAjax('_itemlist', ['model' => $model])];
+        return ['state' => 'success', 'result' => $this->renderAjax('_itemlist', ['model' => $model])];
     }
 
     public function actionLoadperms()
     {
         $model = new RbacModel();
         $model->type = RbacModel::TYPE_PERMISSION;
-        return ['state' => 'success','result'=>$this->renderAjax('_itemlist', ['model' => $model])];
+        return ['state' => 'success', 'result' => $this->renderAjax('_itemlist', ['model' => $model])];
     }
 
     /**
@@ -152,7 +153,7 @@ class DefaultController extends Controller
         if ($model->load(\Yii::$app->request->post(), '') && $model->validate()) {
             $item = $model->getItem($model->name, $model->type);
             $model->description = $item->description;
-            return ['state' => 'success','result'=>$this->renderAjax('_view', ['model' => $model])];
+            return ['state' => 'success', 'result' => $this->renderAjax('_view', ['model' => $model])];
         }
     }
 
@@ -166,12 +167,13 @@ class DefaultController extends Controller
             return $result;
         } else {
             $error = Html::errorSummary($model);
-            $result = ['state' => 'error',  'error' => $error];
+            $result = ['state' => 'error', 'error' => $error];
             return $result;
         }
     }
 
-    public function actionUpditem(){
+    public function actionUpditem()
+    {
         $model = new RbacModel();
         $model->scenario = 'edititem';
         if ($model->load(\Yii::$app->request->post(), '')) {
@@ -258,49 +260,122 @@ class DefaultController extends Controller
         return $this->renderAjax('_assign', ['model' => $model, 'user' => $user]);
     }
 
-    public function actionConvert(){
+    public function actionConvert()
+    {
         \Yii::$app->authManager->removeAll();
-        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(\Yii::$app->authManager->itemFile),'items');
-        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(\Yii::$app->authManager->ruleFile),'rules');
-        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(\Yii::$app->authManager->assignmentFile),'assignments');
+        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(\Yii::$app->authManager->itemFile), 'items');
+        \Yii::$app->authManager->loadItemsFromFile(\Yii::getAlias(\Yii::$app->authManager->ruleFile), 'rules');
+        \Yii::$app->authManager->loadItemsFromFile(
+            \Yii::getAlias(\Yii::$app->authManager->assignmentFile), 'assignments'
+        );
         return $this->redirect(['index']);
     }
 
     public function actionAllItems()
     {
-        $nodes=$edges=[];
+        $nodes = $edges = [];
         $roles = \Yii::$app->authManager->getRoles();
-        foreach($roles as $rol){
-            $nodes[]=['data'=>['id'=>$rol->name,'type'=>$rol->type,'faveColor'=>'#5F40B8','faveShape'=>'triangle']];
-            $childs=\Yii::$app->authManager->getChildren($rol->name);
-            if(!empty($childs)){
-                foreach ($childs as $childName=>$child) {
-                    $edges[] = ['data'=>[
-                        'source' => $childName,
-                        'target' => $rol->name,
-                        'faveColor'=>'#5F40B8',
-                        'faveShape'=>'ellipse'
-                    ]];
+        foreach ($roles as $rol) {
+            $nodes[] = [
+                'data' => [
+                    'id' => $rol->name, 'type' => $rol->type, 'faveColor' => '#5F40B8', 'faveShape' => 'triangle'
+                ]
+            ];
+            $childs = \Yii::$app->authManager->getChildren($rol->name);
+            if (!empty($childs)) {
+                foreach ($childs as $childName => $child) {
+                    $edges[] = [
+                        'data' => [
+                            'source' => $childName,
+                            'target' => $rol->name,
+                            'faveColor' => '#5F40B8',
+                            'faveShape' => 'ellipse'
+                        ]
+                    ];
                 }
             }
 
         }
         $permissions = \Yii::$app->authManager->getPermissions();
-        foreach($permissions as $perm){
-            $nodes[]=['data'=>['id'=>$perm->name,'type'=>$perm->type,'faveColor'=>'#3AB5E1','faveShape'=>'pentagon']];
-            $childs=\Yii::$app->authManager->getChildren($perm->name);
-           if(!empty($childs)){
-                foreach ($childs as $childName=>$child) {
-                    $edges[] = ['data'=>[
-                        'source' => $childName,
-                        'target' => $perm->name,
-                        'faveColor'=>'#E13A69',
-                        'faveShape'=>'ellipse'
-                    ]];
+        foreach ($permissions as $perm) {
+            $nodes[] = [
+                'data' => [
+                    'id' => $perm->name, 'type' => $perm->type, 'faveColor' => '#3AB5E1', 'faveShape' => 'pentagon'
+                ]
+            ];
+            $childs = \Yii::$app->authManager->getChildren($perm->name);
+            if (!empty($childs)) {
+                foreach ($childs as $childName => $child) {
+                    $edges[] = [
+                        'data' => [
+                            'source' => $childName,
+                            'target' => $perm->name,
+                            'faveColor' => '#E13A69',
+                            'faveShape' => 'ellipse'
+                        ]
+                    ];
                 }
             }
         }
-          return  $this->render('graph',['elems'=>Json::encode(['nodes'=>$nodes,'edges'=>$edges])]);
+        return $this->render('graph', ['elems' => Json::encode(['nodes' => $nodes, 'edges' => $edges])]);
+    }
+
+    public function actionAllUsers()
+    {
+        $nodes = $edges = [];
+        $assignments = RbacModel::getAllAssignments();
+        $uids = array_keys($assignments);
+        $uClass = $this->module->userClass;
+        $users = $uClass::find()
+           // ->select([$this->module->userPk, $this->module->usernameAttribute])  //in redis Ar not supported
+            ->where([$this->module->userPk => $uids])
+            ->indexBy($this->module->userPk)->asArray()->all();
+        foreach ($assignments as $uid => $data) {
+            $nodes[] = [
+                'data' => [
+                    'id' => "$uid", 'username' => $users[$uid][$this->module->usernameAttribute],
+                    'faveColor' => '#E13A69', 'faveShape' => 'ellipse'
+                ]
+            ];
+            $roles = \Yii::$app->authManager->getRolesByUser($uid);
+            if(!empty($roles)){
+                foreach ($roles as $rol) {
+                    $nodes[] = [
+                        'data' => [
+                            'id' => $rol->name, 'faveColor' => '#5F40B8', 'faveShape' => 'triangle'
+                        ]
+                    ];
+                    $edges[] = [
+                        'data' => [
+                            'source' => $rol->name,
+                            'target' => "$uid",
+                            'faveColor' => '#5F40B8'
+                        ]
+                    ];
+                    $perms = \Yii::$app->authManager->getPermissionsByRole($rol->name);
+                    if(!empty($perms)){
+                        foreach ($perms as $p) {
+                            $nodes[] = [
+                                'data' => [
+                                    'id' => $p->name, 'faveColor' => '#3AB5E1',
+                                    'faveShape' => 'circle'
+                                ]
+                            ];
+                            $edges[] = [
+                                'data' => [
+                                    'source' => $p->name,
+                                    'target' => "$uid",
+                                    'faveColor' => '#3AB5E1'
+                                ]
+                            ];
+                        }
+                    }
+
+                }
+            }
+
+        }
+        return $this->render('ugraph', ['elems' => Json::encode(['nodes' => $nodes, 'edges' => $edges])]);
     }
 
     /**

@@ -58,6 +58,7 @@ GridView::widget(
                                '<i class="fa fa-link"></i>',
                                 '#Assigs',
                                 [
+                                    'class'=>'btn btn-default',
                                     'title' => RbacModule::t('simplerbac','Grant'),
                                     'data-toggle' => 'modal',
                                     'data-backdrop' => false,

@@ -522,6 +522,15 @@ class RbacModel extends Model{
         return $assig_items;
     }
 
+    public static function getAllAssignments(){
+        $man=Yii::$app->authManager;
+        $reflector=new \ReflectionClass($man::className());
+        $ass=$reflector->getProperty('assignments');
+        $ass->setAccessible(true);
+        $ass=$ass->getValue($man);
+        return $ass;
+    }
+
     /**
      * @param $params
      *

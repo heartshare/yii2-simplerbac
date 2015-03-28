@@ -1,6 +1,8 @@
 Simple rbac manager
 ===================
-for small data and end-user orientation Allow manage roles and operations, and assign roles to user
+Intuitive, cute, ajax, for not large volumes of data and end-user oriented.
+Allow manage roles and operations, and assign roles to user
+Can show data as graph
 
 [See Demo](http://yii2redis-insolita1.c9.io/ru/simplerbac/default/index.html)
 
