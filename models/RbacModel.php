@@ -180,8 +180,8 @@ class RbacModel extends Model
      */
     public function existValidate($attribute, $params)
     {
-        if ($this->getItem($this->name, self::TYPE_ROLE) or $this->getItem(
-                $this->name, self::TYPE_PERMISSION
+        if ($this->getItem($this->$attribute, self::TYPE_ROLE) or $this->getItem(
+                $this->$attribute, self::TYPE_PERMISSION
             )
         ) {
             return true;
@@ -196,8 +196,8 @@ class RbacModel extends Model
      */
     public function noexistValidate($attribute, $params)
     {
-        if (Yii::$app->authManager->getRole($this->name, self::TYPE_ROLE) or Yii::$app->authManager->getPermission(
-                $this->name, self::TYPE_PERMISSION
+        if (Yii::$app->authManager->getRole($this->$attribute, self::TYPE_ROLE) or Yii::$app->authManager->getPermission(
+                $this->$attribute, self::TYPE_PERMISSION
             )
         ) {
             $this->addError($attribute, RbacModule::t('simplerbac', 'Item also exists'));
