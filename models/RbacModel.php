@@ -25,8 +25,8 @@ class RbacModel extends Model{
     const TYPE_ROLE = 1;
     const TYPE_PERMISSION = 2;
 
-    const EVENT_BEFORE_ASSIGN='event_before_assgin';
-    const EVENT_AFTER_ASSIGN='event_after_assgin';
+    const EVENT_BEFORE_ASSIGN='event_before_assign';
+    const EVENT_AFTER_ASSIGN='event_after_assign';
 
     /**
      * @var integer $type the type of the item. This should be either [[TYPE_ROLE]] or [[TYPE_PERMISSION]].
