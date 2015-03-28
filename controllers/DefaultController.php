@@ -267,20 +267,37 @@ class DefaultController extends Controller
 
     public function actionAllItems()
     {
-        $roles = Yii::$app->authManager->getRoles();
-        $permissions = Yii::$app->authManager->getPermissions();
-        $items = ArrayHelper::merge($roles, $permissions);
-        $links = [];
-        $_keys = array_keys($items);
-        foreach ($items as $np=>$oP) {
-            foreach ($c = Yii::$app->authManager->getChildren($np) as $nC=>$oC) {
-                $links[] = [
-                    'source' => array_search($np, $_keys),
-                    'target' => array_search($nC, $_keys),
-                ];
+        $nodes=$edges=[];
+        $roles = \Yii::$app->authManager->getRoles();
+        foreach($roles as $rol){
+            $nodes[]=['data'=>['id'=>$rol->name,'type'=>$rol->type,'objcolor'=>'#5F40B8']];
+            $childs=\Yii::$app->authManager->getChildren($rol->name);
+            if(!empty($childs)){
+                foreach ($childs as $childName=>$child) {
+                    $edges[] = ['data'=>[
+                        'source' => $rol->name,
+                        'target' => $childName,
+                        'objcolor'=>'#5F40B8'
+                    ]];
+                }
+            }
+
+        }
+        $permissions = \Yii::$app->authManager->getPermissions();
+        foreach($permissions as $perm){
+            $nodes[]=['id'=>$perm->name,'type'=>$perm->type,'objcolor'=>'#3AB5E1'];
+            $childs=\Yii::$app->authManager->getChildren($perm->name);
+            if(!empty($childs)){
+                foreach ($childs as $childName=>$child) {
+                    $edges[] = [
+                        'source' => $perm->name,
+                        'target' => $childName,
+                        'objcolor'=>'#5F40B8'
+                    ];
+                }
             }
         }
-          return  ['nodes'=>array_values($items),'links'=>$links];
+          return  ['elements'=>['nodes'=>$nodes,'edges'=>$edges]];
     }
 
     /**
