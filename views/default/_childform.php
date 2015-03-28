@@ -31,6 +31,7 @@ use insolita\simplerbac\RbacModule;
     <?= $form->field($model, 'new_child')->dropDownList($model->getItemsForAssign()); ?>
     <div class="form-group">
         <?= Html::submitButton(RbacModule::t('simplerbac','Add'), ['class' => 'btn btn-primary addchild']) ?>
+
     </div>
     <?php ActiveForm::end(); ?>
 </div>

@@ -1,6 +1,6 @@
 Simple rbac manager
 ===================
-for small data and end-user orientation Allow manage roles and operations, and assign to user
+for small data and end-user orientation Allow manage roles and operations, and assign roles to user
 
 Installation
 ------------
