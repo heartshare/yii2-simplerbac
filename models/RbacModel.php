@@ -515,7 +515,7 @@ class RbacModel extends Model{
         $allroles = $this->getRoles();
         foreach ($allroles as $ap) {
             if (!$this->_authMan->getAssignment($ap->name, $userid)) {
-                $assig_items[$ap->name] = $ap->description;
+                $assig_items[$ap->name] = $ap->description.' '.$ap->name;
             }
 
         }
