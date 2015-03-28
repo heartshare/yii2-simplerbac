@@ -50,7 +50,7 @@ GridView::widget(
                     'view' => function ($url, $model) {
                             $url = Yii::$app->getUrlManager()->createAbsoluteUrl(
                                 [
-                                    '/simplerbac/default/assign',
+                                    '/simplerbac/default/assign-form',
                                     'userid' => $model->{Yii::$app->getModule('simplerbac')->userPk}
                                 ]
                             );
@@ -62,7 +62,8 @@ GridView::widget(
                                     'title' => RbacModule::t('simplerbac','Grant'),
                                     'data-toggle' => 'modal',
                                     'data-backdrop' => false,
-                                    'data-remote' => $url
+                                    'data-action' => $url,
+                                    'data-oktarget'=>"#Assigs .modal-body"
                                 ]
                             );
                         },

@@ -21,7 +21,11 @@ use insolita\simplerbac\RbacModule;
     <?php $form = ActiveForm::begin(
         [
             'id' => 'userassign-form',
-            'options' => ['class' => 'form-horizontal'],
+            'options' => ['class' => 'form-horizontal ajaxform',
+                'data-errtarget'=>'div#ch-error',
+                'data-trigger'=>'modalform_submitted',
+                'data-scroll'=>1,
+            ],
             'enableAjaxValidation' => false,
             'enableClientValidation' => false,
             'action' => \Yii::$app->getUrlManager()->createAbsoluteUrl(

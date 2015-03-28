@@ -11,6 +11,8 @@ use yii\helpers\Html;
 
 $this->title = RbacModule::t('simplerbac', 'Assign Roles');
 $this->params['breadcrumbs'][] = $this->title;
+\insolita\simplerbac\assets\RbacAsset::register($this);
+
 ?>
 <?= Html::a(
     RbacModule::t('simplerbac', 'Roles and operations'), ['/simplerbac/default/index'], ['class' => 'btn btn-primary']
@@ -38,51 +40,25 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 $js
     = <<<JS
-$(document).on("click","[data-remote]",function(e) {
+$(document).on('modalform_submitted',function(){
+  $("div#Assigs .modal-body").html('');
+  $("#Assigs").modal('hide');
+  $.pjax.reload({container:'#userpjax'});
+});
+$(document).on("click","[data-action]",function(e) {
 e.preventDefault();
-$.ajax({url: $(this).data('remote'), type: "GET",async:true,success: function(response){if(response.result){jQuery("div#Assigs .modal-body").html(response.result);}}});
+$(this).rbacManage('send', '#ldr');
 });
 $('#Assigs').on('hidden.bs.modal', function (e) {
   $("div#Assigs .modal-body").html('');
 });
-
 $('[rel="popover"]').popover();
 
  $(document).on('submit',"form#userassign-form",function(e){
-          if($(this).find('.has-error').length) {
-                        return false;
-                }
-                $('#ldr').show();
-                $.ajax({
-                    url: $(this).attr('action'),
-                    type: "POST",
-                    dataType: "json",
-                    async:true,
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        if(response.state=='success'){
-                         $("#ch-error").hide();
-                          $("div#Assigs .modal-body").html('');
-                          $("#Assigs").modal('hide');
-                          $.pjax.reload({container:'#userpjax'});
-                        }else{
-                           $("div#ch-error").html(response.error);
-                           $("div#ch-error").show();
-                           $('#ldr').hide();
-                        }
-                    },
-                    error: function(response) {
-                            if(typeof(response) == 'object' && response.responseJSON){
-                            err='Server Error '+response.responseJSON.code+ response.responseJSON.message;
-                        }else{
-                            err=response;
-                        }
-                        alert(err);
-                    }
-                });
+ e.preventDefault();
+  $(this).rbacManage('sendform', '#ldr');
+ });
 
-                return false;
-     });
 JS;
 
 $this->registerJs($js);

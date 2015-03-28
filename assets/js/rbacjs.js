@@ -120,9 +120,6 @@
 		scroll: function (selector) {
 			var scrollTop = $(selector).offset().top;
 			$(document).scrollTop(scrollTop);
-		},
-		openmodal:function(){
-			// TODO
 		}
 
 	};

@@ -28,7 +28,7 @@ class DefaultController extends Controller
         return [
             [
                 'class' => 'yii\filters\ContentNegotiator',
-                'except' => ['index', 'convert', 'assign', 'users', 'all-items', 'all-users'],
+                'except' => ['index', 'convert', 'users', 'all-items', 'all-users'],
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ],
@@ -46,7 +46,9 @@ class DefaultController extends Controller
                     'loadroles' => ['post'],
                     'loadperms' => ['post'],
                     'rename' => ['post'],
-                    'delete' => ['post']
+                    'delete' => ['post'],
+                    'assign' => ['post'],
+                    'assign-form' => ['post']
                 ],
             ],
         ];
@@ -235,7 +237,6 @@ class DefaultController extends Controller
 
     public function actionAssign($userid)
     {
-        \Yii::$app->response->format = 'json';
         $model = new RbacModel();
         $user = $this->findUser($userid);
         $model->scenario = 'userassign';
@@ -254,6 +255,13 @@ class DefaultController extends Controller
                 return $result;
             }
         }
+        return ['state' => 'success', 'result' => $this->renderAjax('_assign', ['model' => $model, 'user' => $user])];
+    }
+    public function actionAssignForm($userid)
+    {
+        $model = new RbacModel();
+        $user = $this->findUser($userid);
+        $model->scenario = 'userassign';
         return ['state' => 'success', 'result' => $this->renderAjax('_assign', ['model' => $model, 'user' => $user])];
     }
 

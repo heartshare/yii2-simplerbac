@@ -69,7 +69,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 $js = <<<JS
 $(document).on('rbacitem_update',function(){
-   console.log('catch custom event');
    $('.rbaclist').each(function(){
        $(this).rbacManage('send', '#ldr');
    });
