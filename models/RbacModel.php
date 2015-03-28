@@ -11,10 +11,12 @@ namespace insolita\simplerbac\models;
 
 use insolita\simplerbac\RbacModule;
 use yii\base\Event;
+use yii\base\Exception;
 use yii\base\Model;
 use Yii;
 use yii\base\ModelEvent;
 use yii\data\ActiveDataProvider;
+use yii\rbac\PhpManager;
 
 class RbacModel extends Model{
     const TYPE_ROLE = 1;
@@ -524,11 +526,16 @@ class RbacModel extends Model{
 
     public static function getAllAssignments(){
         $man=Yii::$app->authManager;
-        $reflector=new \ReflectionClass($man::className());
-        $ass=$reflector->getProperty('assignments');
-        $ass->setAccessible(true);
-        $ass=$ass->getValue($man);
-        return $ass;
+        if($man instanceof PhpManager){
+            $reflector=new \ReflectionClass($man::className());
+            $ass=$reflector->getProperty('assignments');
+            $ass->setAccessible(true);
+            $ass=$ass->getValue($man);
+            return $ass;
+        }else{
+            throw new Exception('Not supported for DbManager yet');
+        }
+
     }
 
     /**
