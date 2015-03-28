@@ -317,7 +317,7 @@ class DefaultController extends Controller
                 }
             }
         }
-        return $this->render('graph', ['elems' => Json::encode(['nodes' => $nodes, 'edges' => $edges])]);
+         return $this->render('graph', ['elems' => Json::encode(['nodes' => $nodes, 'edges' => $edges])]);
     }
 
     public function actionAllUsers()
@@ -333,7 +333,7 @@ class DefaultController extends Controller
         foreach ($assignments as $uid => $data) {
             $nodes[] = [
                 'data' => [
-                    'id' => "$uid", 'username' => $users[$uid][$this->module->usernameAttribute],
+                    'id' => "u$uid", 'username' => $users[$uid][$this->module->usernameAttribute],
                     'faveColor' => '#E13A69', 'faveShape' => 'ellipse'
                 ]
             ];
@@ -342,13 +342,14 @@ class DefaultController extends Controller
                 foreach ($roles as $rol) {
                     $nodes[] = [
                         'data' => [
-                            'id' => $rol->name, 'faveColor' => '#5F40B8', 'faveShape' => 'triangle'
+                            'id' => $rol->name, 'faveColor' => '#5F40B8', 'faveShape' => 'star'
                         ]
                     ];
                     $edges[] = [
                         'data' => [
+                            "id"=>$rol->name.'_'."$uid",
                             'source' => $rol->name,
-                            'target' => "$uid",
+                            'target' => "u$uid",
                             'faveColor' => '#5F40B8'
                         ]
                     ];
@@ -358,13 +359,14 @@ class DefaultController extends Controller
                             $nodes[] = [
                                 'data' => [
                                     'id' => $p->name, 'faveColor' => '#3AB5E1',
-                                    'faveShape' => 'circle'
+                                    'faveShape' => 'rectangle'
                                 ]
                             ];
                             $edges[] = [
                                 'data' => [
+                                    "id"=>$p->name.'_'.$rol->name,
                                     'source' => $p->name,
-                                    'target' => "$uid",
+                                    'target' => $rol->name,
                                     'faveColor' => '#3AB5E1'
                                 ]
                             ];

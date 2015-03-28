@@ -39,8 +39,8 @@ jQuery(function(){
 var elems=$elems;
     $('#cy').cytoscape({
       layout: {
-          name: 'breadthfirst',
-        directed: true,
+          name: 'cose',
+         directed: true,
         padding: 15
       },
 
@@ -75,12 +75,8 @@ var elems=$elems;
           .css({
             'line-style': 'dotted',
             'target-arrow-shape': 'diamond'
-          })
-        .selector('.faded')
-          .css({
-            'opacity': 0.25,
-            'text-opacity': 0
           }),
+
 
       elements: elems,
 
