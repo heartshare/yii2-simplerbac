@@ -21,7 +21,7 @@ class AjaxHelperAsset extends AssetBundle{
 
     public function init()
     {
-        $postfix = !YII_DEBUG ? '' : '.min';
+        $postfix = YII_DEBUG ? '' : '.min';
         $this->js[] = 'ajhelpjs' . $postfix . '.js';
 
         parent::init();
