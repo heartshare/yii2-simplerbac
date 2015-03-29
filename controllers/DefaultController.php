@@ -334,7 +334,7 @@ class DefaultController extends Controller
         $assignments = RbacModel::getAllAssignments();
         $uids = array_keys($assignments);
         $uClass = $this->module->userClass;
-        if(count($uids)>50){
+        if(count($uids)>$this->module->maxUsersForGraph){
             \Yii::$app->session->setFlash('error', RbacModule::t('simplerbac', 'Too many users for show'));
             return $this->redirect(['index']);
         }

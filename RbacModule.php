@@ -31,11 +31,11 @@ class RbacModule extends \yii\base\Module {
      * @var string
      */
     public $usernameAttribute='username';
-    /**
-     * @var bool
-     * public $allowAssignPermissions=false;
-     */
 
+    /**
+     * @var integer $maxUsersForGraph - prevent showing users graph if count users more then this parameter
+     */
+    public $maxUsersForGraph=50;
     /**
      * @var array the the internalization configuration for this module
      */
