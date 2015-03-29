@@ -9,6 +9,7 @@
 namespace insolita\simplerbac\controllers;
 
 use insolita\simplerbac\models\RbacModel;
+use insolita\simplerbac\RbacModule;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -333,6 +334,10 @@ class DefaultController extends Controller
         $assignments = RbacModel::getAllAssignments();
         $uids = array_keys($assignments);
         $uClass = $this->module->userClass;
+        if(count($uids)>50){
+            \Yii::$app->session->setFlash('error', RbacModule::t('simplerbac', 'Too many users for show'));
+            return $this->redirect(['index']);
+        }
         $users = $uClass::find()
             // ->select([$this->module->userPk, $this->module->usernameAttribute])  //in redis Ar not supported
             ->where([$this->module->userPk => $uids])
