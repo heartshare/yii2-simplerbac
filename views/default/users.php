@@ -11,7 +11,7 @@ use yii\helpers\Html;
 
 $this->title = RbacModule::t('simplerbac', 'Assign Roles');
 $this->params['breadcrumbs'][] = $this->title;
-\insolita\simplerbac\assets\RbacAsset::register($this);
+\insolita\simplerbac\assets\AjaxHelperAsset::register($this);
 
 ?>
 <?= Html::a(
@@ -41,19 +41,15 @@ $this->params['breadcrumbs'][] = $this->title;
 $js
     = <<<JS
 $('[rel="popover"]').popover();
+$.ajaxHelper('.ajaxmodal','click','send','#ldr');
+$.ajaxHelper("form#userassign-form",'submit','send','#ldr');
+
 $(document).on('modalform_submitted',function(){
   $("div#Assigs .modal-body").html('');
   $("#Assigs").modal('hide');
   $.pjax.reload({container:'#userpjax'});
 });
-$(document).on("click","[data-action]",function(e) {
-   e.preventDefault();
-   $(this).rbacManage('send', '#ldr');
-});
- $(document).on('submit',"form#userassign-form",function(e){
- e.preventDefault();
-  $(this).rbacManage('sendform', '#ldr');
- });
+
 
 JS;
 

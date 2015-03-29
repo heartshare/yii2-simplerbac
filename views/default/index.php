@@ -9,7 +9,7 @@
 */
 use yii\helpers\Html;
 use insolita\simplerbac\RbacModule;
-\insolita\simplerbac\assets\RbacAsset::register($this);
+\insolita\simplerbac\assets\AjaxHelperAsset::register($this);
 $this->title = RbacModule::t('simplerbac', 'Roles and operations');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -70,25 +70,14 @@ $this->params['breadcrumbs'][] = $this->title;
 $js = <<<JS
 $(document).on('rbacitem_update',function(){
    $('.rbaclist').each(function(){
-       $(this).rbacManage('send', '#ldr');
+       $(this).ajaxHelper('send', '#ldr');
    });
 });
-$(document).on('click','button.aj',function(e){
-  e.preventDefault();
-  $(this).rbacManage('send', '#ldr');
-});
-$(document).on('click','#totop',function(e){
-  $(this).rbacManage('scroll', '#pagetop');
-});
-$(document).on('click','button.unchild',function(e){
-  e.preventDefault();
-  $(this).rbacManage('send','#vldr');
-});
+$.ajaxHelper('button.aj','click','send','#ldr');
+$.ajaxHelper('#totop','click','scroll','#pagetop');
+$.ajaxHelper('button.unchild','click','send','#vldr');
+$.ajaxHelper('.ajaxform','submit','send');
 
-$(document).on('submit','.ajaxform',function(e){
-  e.preventDefault();
- $(this).rbacManage('sendform', false);
-});
 JS;
 
 $this->registerJS($js);

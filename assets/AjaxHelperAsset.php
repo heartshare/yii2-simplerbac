@@ -12,11 +12,18 @@ namespace insolita\simplerbac\assets;
 use yii\bootstrap\BootstrapPluginAsset;
 use yii\web\AssetBundle;
 
-class RbacAsset extends AssetBundle{
+class AjaxHelperAsset extends AssetBundle{
 
     public $sourcePath = '@insolita/simplerbac/assets/js';
-    public $js= ['rbacjs.js'];
     public $depends = [
         'yii\web\JqueryAsset'
     ];
+
+    public function init()
+    {
+        $postfix = !YII_DEBUG ? '' : '.min';
+        $this->js[] = 'ajhelpjs' . $postfix . '.js';
+
+        parent::init();
+    }
 }
