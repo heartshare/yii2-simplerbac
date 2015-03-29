@@ -23,7 +23,6 @@ class AjaxHelperAsset extends AssetBundle{
     {
         $postfix = YII_DEBUG ? '' : '.min';
         $this->js[] = 'ajhelpjs' . $postfix . '.js';
-
         parent::init();
     }
 }
