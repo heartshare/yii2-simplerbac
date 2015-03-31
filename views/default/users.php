@@ -43,9 +43,6 @@ $js
 $('[rel="popover"]').popover();
 $.ajaxHelper('.ajaxmodal','click','send',[{loader:'#ldr'}]);
 $.ajaxHelper("form#userassign-form",'submit','send',[{loader:'#ldr',pjaxid:'#userpjax'}]);
-
-
-
 JS;
 
 $this->registerJs($js);
