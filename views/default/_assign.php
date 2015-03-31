@@ -24,6 +24,7 @@ use insolita\simplerbac\RbacModule;
             'options' => ['class' => 'form-horizontal ajaxform',
                 'data-errtarget'=>'div#ch-error',
                 'data-trigger'=>'modalform_submitted',
+                'data-bsmodalid'=>'#Assigs',
                 'data-scroll'=>1,
             ],
             'enableAjaxValidation' => false,
