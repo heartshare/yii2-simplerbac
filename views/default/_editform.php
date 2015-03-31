@@ -31,6 +31,7 @@ use insolita\simplerbac\RbacModule;
     <div class="alert alert-danger" id="add-error" style="display: none;">...</div>
     <?= $form->field($model, 'name')->textInput(['disabled'=>true,'name'=>'oldname']) ?>
     <?= $form->field($model, 'name')->hiddenInput()->label(false) ?>
+    <?= $form->field($model, 'ruleName')->hiddenInput()->label(false) ?>
     <?= $form->field($model, 'description') ?>
     <?= $form->field($model, 'type')->dropDownList(
         [

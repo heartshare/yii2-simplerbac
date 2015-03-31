@@ -36,6 +36,11 @@ class RbacModule extends \yii\base\Module {
      * @var integer $maxUsersForGraph - prevent showing users graph if count users more then this parameter
      */
     public $maxUsersForGraph=50;
+
+    /**
+     * @var bool $userendMode - disallow delete and change items - allow create roles, inherit permissions and assign
+     */
+    public $userendMode=false;
     /**
      * @var array the the internalization configuration for this module
      */
