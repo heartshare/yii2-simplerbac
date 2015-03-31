@@ -14,7 +14,7 @@ use yii\web\AssetBundle;
 
 class AjaxHelperAsset extends AssetBundle{
 
-    public $sourcePath = '@insolita/simplerbac/assets/js';
+    public $sourcePath = '@vendor/bower/ajaxhelper/dist';
     public $depends = [
         'yii\web\JqueryAsset'
     ];
@@ -22,7 +22,7 @@ class AjaxHelperAsset extends AssetBundle{
     public function init()
     {
         $postfix = YII_DEBUG ? '' : '.min';
-        $this->js[] = 'ajhelpjs' . $postfix . '.js';
+        $this->js[] = 'ajhelp' . $postfix . '.js';
         parent::init();
     }
 }

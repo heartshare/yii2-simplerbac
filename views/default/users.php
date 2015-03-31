@@ -41,14 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
 $js
     = <<<JS
 $('[rel="popover"]').popover();
-$.ajaxHelper('.ajaxmodal','click','send','#ldr');
-$.ajaxHelper("form#userassign-form",'submit','send','#ldr');
+$.ajaxHelper('.ajaxmodal','click','send',[{loader:'#ldr'}]);
+$.ajaxHelper("form#userassign-form",'submit','send',[{loader:'#ldr',pjaxid:'#userpjax'}]);
 
-$(document).on('modalform_submitted',function(){
-  $("div#Assigs .modal-body").html('');
-  $("#Assigs").modal('hide');
-  $.pjax.reload({container:'#userpjax'});
-});
 
 
 JS;

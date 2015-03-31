@@ -70,13 +70,13 @@ $this->params['breadcrumbs'][] = $this->title;
 $js = <<<JS
 $(document).on('rbacitem_update',function(){
    $('.rbaclist').each(function(){
-       $(this).ajaxHelper('send', '#ldr');
+       $(this).ajaxHelper('send', {loader:'#ldr'});
    });
 });
-$.ajaxHelper('button.aj','click','send','#ldr');
+$.ajaxHelper('button.aj','click','send',[{loader:'#ldr'}]);
 $.ajaxHelper('#totop','click','scroll','#pagetop');
-$.ajaxHelper('button.unchild','click','send','#vldr');
-$.ajaxHelper('.ajaxform','submit','send');
+$.ajaxHelper('button.unchild','click','send',[{loader:'#vldr'}]);
+$.ajaxHelper('.ajaxform','submit');
 
 JS;
 
