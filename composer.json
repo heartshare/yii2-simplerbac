@@ -14,7 +14,7 @@
         "yiisoft/yii2": "*",
         "yiisoft/yii2-bootstrap":"*",
         "bower-asset/cytoscape":"*",
-      "bower-asset/ajaxhelper":"0.0.2"
+      "bower-asset/ajaxhelper":"*"
 
     },
     "autoload": {
