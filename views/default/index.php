@@ -36,9 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel panel-info">
                 <div class="panel-heading"><?= RbacModule::t('simplerbac','All Roles') ?></div>
                 <?php $model->type = \insolita\simplerbac\models\RbacModel::TYPE_ROLE; ?>
-                <div class="panel-body rbaclist" style="overflow: auto; max-height: 650px;" id="rolelist"
-                     data-oktarget="#rolelist"
-                     data-action="<?=\yii\helpers\Url::to(['/simplerbac/default/loadroles'])?>">
+                <div class="panel-body rbaclist" style="overflow: auto; max-height: 650px;" id="rolelist">
                     <?= $this->render('_itemlist', ['model' => $model]); ?>
                 </div>
             </div>
@@ -47,9 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel panel-warning">
                 <div class="panel-heading"><?= RbacModule::t('simplerbac','All operations') ?></div>
                 <?php $model->type = \insolita\simplerbac\models\RbacModel::TYPE_PERMISSION; ?>
-                <div class="panel-body rbaclist" style="overflow: auto; max-height: 650px;" id="permlist"
-                     data-oktarget="#permlist"
-                     data-action="<?=\yii\helpers\Url::to(['/simplerbac/default/loadperms'])?>">
+                <div class="panel-body rbaclist" style="overflow: auto; max-height: 650px;" id="permlist">
                     <?= $this->render('_itemlist', ['model' => $model]); ?>
                 </div>
             </div>
@@ -67,17 +63,17 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <div class="pull-right offset-1" id="totop"><?= Html::button('<i class="fa fa-4x fa-arrow-circle-o-up"></i>',[]) ?></div>
 <?php
+$loadroles=\yii\helpers\Url::to(['/simplerbac/default/loadroles'],true);
+$loadperms=\yii\helpers\Url::to(['/simplerbac/default/loadperms'],true);
 $js = <<<JS
-$(document).on('rbacitem_update',function(){
-   $('.rbaclist').each(function(){
-       $(this).ajaxHelper('send', {loader:'#ldr'});
-   });
-});
 $.ajaxHelper('button.aj','click','send',[{loader:'#ldr'}]);
 $.ajaxHelper('#totop','click','scroll','#pagetop');
 $.ajaxHelper('button.unchild','click','send',[{loader:'#vldr'}]);
 $.ajaxHelper('.ajaxform','submit');
-
+$(document).on('rbacitem_update',function(e){
+   $('#rolelist').ajaxHelper('send',{loader:false, oktarget:'#rolelist', action:"$loadroles"});
+   $('#permlist').ajaxHelper('send',{loader:false, oktarget:'#permlist', action:"$loadperms"});
+});
 JS;
 
 $this->registerJS($js);
